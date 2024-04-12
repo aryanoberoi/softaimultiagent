@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Form</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Assuming you're using an external CSS file -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333; /* Fallback color */
+            background-image: url('images/login.jpg'); /* Update with your actual image path */
+            background-size: cover;
+            background-position: center;
+            color: rgb(255, 255, 255);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 400px; /* Set a fixed width */
+            height: auto; /* Adjust height as needed, auto allows it to expand based on content up to a point */
+            max-height: 600px; /* Optional: Set a max height to ensure it doesn't grow beyond this */
+            overflow: auto; /* Adds scrollbars if content exceeds the container's height */
+            padding: 20px;
+            background-color: #222;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+            box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+        }
+        
+
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-input {
+            margin-bottom: 15px;
+            
+        }
+        .form-input input, .form-input select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        .form-input input[type="submit"] {
+            background-color: #007BFF;
+            color: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+        .form-input input[type="submit"]:hover {
+            background-color: #0056b3;
+            
+        }
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .switch-form a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            
+        }
+        .logo img {
+            width: 100px; /* Adjust based on your logo size */
+            height: 100px; /* Make sure this is equal to the width for a perfect circle */
+            border-radius: 50%; /* This makes the image circular */
+            object-fit: cover; /* This ensures the image covers the area without stretching, might clip parts of the image if not square */
+        }
+        .error {
+            color: #ff3860;
+            margin-top: 5px;
+        }
+        .valid {
+            color: #23d160;
+            margin-top: 5px;
+        }
+        .form-input input {
+            background-color: #f0f0f05a; /* Grey background */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="images/logo 1.jpeg" alt="Logo"> <!-- Update logo.png to your logo path -->
+        </div>
+        <h2>Sign Up</h2>
+        <form id="signup-form">
+            <div class="form-input">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-input">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-input">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required minlength="8">
+                <div id="passwordHelp" class="error"></div>
+            </div>
+            <div class="form-input">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div id="confirmPasswordHelp" class="error"></div>
+            </div>
+            <div class="form-input">
+                <input type="submit" value="Sign Up">
+            </div>
+        </form>
+        <div class="switch-form">Already registered? <a href="login.html">Login</a></div>
+    </div>
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission to view the validation results on the same page
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            let valid = true;
+
+            // Password strength check (simple example)
+            if (password.length < 8) {
+                document.getElementById('passwordHelp').textContent = 'Password must be at least 8 characters long.';
+                valid = false;
+            } else {
+                document.getElementById('passwordHelp').textContent = '';
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordHelp').textContent = 'Passwords do not match.';
+                valid = false;
+            } else {
+                document.getElementById('confirmPasswordHelp').textContent = '';
+            }
+
+            // If valid, submit form or AJAX request here
+            if (valid) {
+                alert('Form is valid! Implement form submission logic here.');
+                // Example: Redirect to login page or display success message
+                // window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

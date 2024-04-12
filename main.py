@@ -4,6 +4,7 @@ import MySQLdb.cursors
 import re
 from openai import OpenAI
 import time
+import tempfile
 import os
 import ast
 from autogen.agentchat.contrib.gpt_assistant_agent import GPTAssistantAgent
@@ -15,11 +16,10 @@ app = Flask(__name__)
 app.secret_key = ' key'
 socket_io = SocketIO(app)
 def new_print_received_message(self, message, sender):
-    message=str(message)
-    start_index = message.find("'content': '") + len("'content': '")
-    end_index = message.find("'", start_index)
-    content = message[start_index:end_index]
-    socket_io.emit('message', {"sender": sender.name, "content": content})
+    message = self._message_to_dict(message)
+    print(f"{sender.name}: {message.get('content')}")
+    socket_io.emit('message', {"sender": sender.name, "content": message.get('content')})
+
 
 GroupChatManager._print_received_message = new_print_received_message
 
@@ -27,7 +27,7 @@ less_costly_config_list = config_list_from_json(
     env_or_file="OAI_CONFIG_LIST.json", 
     filter_dict={
         "model": [
-            "gpt-3.5-turbo-1106",
+            "gpt-4-turbo",
         ]
     }
 )
@@ -36,35 +36,62 @@ less_costly_llm_config = {
     "config_list": less_costly_config_list,
     "timeout": 60,
 }
+from autogen import ConversableAgent
+from autogen.coding import LocalCommandLineCodeExecutor
 
+# Create a temporary directory to store the code files.
+temp_dir = tempfile.TemporaryDirectory()
+
+# Create a local command line code executor.
+executor = LocalCommandLineCodeExecutor(
+    timeout=10,  # Timeout for each code execution in seconds.
+    work_dir=temp_dir.name,  # Use the temporary directory to store the code files.
+)
+
+# Create an agent with code executor configuration.
+code_executor_agent = ConversableAgent(
+    "frontend engineer",
+    llm_config=False,  # Turn off LLM for this agent.
+    code_execution_config={"executor": executor},  # Use the local command line code executor.
+    human_input_mode="ALWAYS",  # Always take human input for this agent for safety.
+)
+
+
+code_writer_agent = GPTAssistantAgent(
+    name="code_writer_agent",
+    instructions=""""You are a helpful AI assistant.
+Solve tasks using your frontend coding and language skills.
+You collaberate with the designer to write and give the code in a single html file where js and css is all in the same one file.
+In the following cases, suggest html code for the user to execute. When you need to perform some task with code, use the code to perform the task and output the result. Finish the task smartly.
+If you want the user to save the code in a file before executing it, put # filename: <filename> inside the code block as the first line. 
+Reply 'TERMINATE' in the end when everything is done.
+""",
+    llm_config=less_costly_llm_config,
+    code_execution_config=False,  # Turn off code execution for this agent.
+)
 user_proxy = UserProxyAgent(
-   name="User_proxy",
+   name="CEO",
    llm_config=less_costly_llm_config,
-   system_message="""You are the CEO of a tech company. Your role is to provide a base for cto and engineer to engage in a discussion about the company requirement. You are responsible for introducing topics and moderating the conversation to ensure it remains on track and productive. 
-Directive: Facilitate a smooth and engaging conversation between engineer and cto.""",
+   system_message="""You are the CEO of a company that specializes in making landing pages with html, css and javascript with good design for specific use cases. Discuss wih the CTO on how you would design the website """,
    human_input_mode="TERMINATE",
    max_consecutive_auto_reply=5
 )
 
-# define two GPTAssistants
 sam = GPTAssistantAgent(
     name="CTO",
     llm_config=less_costly_llm_config,
-    instructions="""You are the CTO of a software company. Engage in a aconversation with the ceo and gather requirements about the project requirements then tell the engineer to start working and discuss with him the technologies.
-  At the end of each message, you hand the conversation back to the CEO, by name: User_proxy"""
+    instructions="""You are the CTO of a software company. Engage in a aconversation with the ceo and gather requirements, discuss the features and requirements of making the landing page with html,  css and javascript."""
 )
 
 bob = GPTAssistantAgent(
-    name="Engineer",
+    name="Designer",
     llm_config=less_costly_llm_config,
-    instructions="""You are a software engineer. Your role is to talk to the CTO and figure out how tom carry out the project.
-Directive: You write code and pass it to the cto to check.  At the end of each message, you hand the conversation back to the moderator, by name: User_proxy""",
+    instructions="""You are a UI/UX designer for website landing pages. You will understand the requirements by talking to the CEO and the conversation between CEO and CTO and based on the takeaway you will create a proper and beautiful design for the anding page and pass it on the engineer.""",
 )
 summ = GPTAssistantAgent(
     name="summ",
     llm_config=less_costly_llm_config,
-    instructions="""You are a software engineer. Your role is to talk to the CTO and figure out how tom carry out the project.
-Directive: You write code and pass it to the cto to check.  At the end of each message, you hand the conversation back to the moderator, by name: User_proxy""",
+    instructions="""You are a summarizer bot. At the end of the entire discussion, you summarize the requirements of the landing page and all the information in about 50 words to pass to the designer and the frontend engineer. You summarize all the requirements technically and include all the feature of the landing page discussed between ceo and cto. You will only send a single message when all the requirements have been discussed""",
 )
 
 costly_config_list = config_list_from_json(
@@ -82,7 +109,7 @@ costly_llm_config = {
 }
 
 # define group chat
-groupchat = GroupChat(agents=[user_proxy, sam, bob], messages=[], max_round=100)
+groupchat = GroupChat(agents=[user_proxy, sam, summ, code_writer_agent, bob], messages=[], max_round=1000)
 manager = GroupChatManager(groupchat=groupchat, llm_config=costly_llm_config)
 
 
@@ -123,7 +150,7 @@ def login():
         else:
             # Account doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
-    return render_template('index.html', msg='')
+    return render_template('login.html', msg='')
 
 
 @app.route('/login/logout')
@@ -178,7 +205,7 @@ def home():
         # User is loggedin show them the home page
         return render_template('chat.html', username=session['username'])
     # User is not loggedin redirect to login page
-    return redirect(url_for('login'))
+    return render_template("index.html")
 
 @app.route("/get", methods=["GET", "POST"])
 def chat():
@@ -188,7 +215,7 @@ def chat():
 
 
 def get_Chat_response(text):
-   user_proxy.initiate_chat(manager, message=text)
+   user_proxy.initiate_chat(manager, message=text, summary_method="reflection_with_llm")
    messages = user_proxy.chat_messages[manager] 
 
 if __name__ == '__main__':

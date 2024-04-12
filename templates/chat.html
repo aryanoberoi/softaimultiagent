@@ -172,7 +172,23 @@ socket.on('message', function(data) {
 
     // Create the image tag
     const img = document.createElement('img');
-    img.src = "https://i.ibb.co/fSNP7Rz/icons8-chatgpt-512.png";
+    switch(data.sender) {
+        case "CEO":
+            img.src = "https://cdn.pixabay.com/photo/2023/06/24/01/56/portrait-8084362_1280.jpg";
+            break;
+        case "CTO":
+            img.src = "https://cdn.pixabay.com/photo/2023/10/20/14/25/ai-generated-8329596_1280.jpg";
+            break;
+        case "Engineer":
+            img.src = "https://cdn.pixabay.com/photo/2023/10/20/14/25/ai-generated-8329596_1280.jpg";
+            break;
+        case "Designer":
+            img.src = "https://cdn.pixabay.com/photo/2023/10/20/14/25/ai-generated-8329596_1280.jpg";
+            break;
+        case "CodeReviewer":
+            img.src = "https://cdn.pixabay.com/photo/2024/01/05/18/47/technology-8490011_1280.png";
+            break;
+    }
     img.className = "rounded-circle user_img_msg";
 
     // Append the image to the image container
@@ -184,7 +200,7 @@ socket.on('message', function(data) {
 
     // Assuming `str_time` is defined elsewhere and contains the message timestamp
     // Create the message text including the sender, content, and timestamp
-    msgContDiv.innerHTML = data.content + '<span class="msg_time">' + str_time + '</span>';
+    msgContDiv.innerHTML = data.content + "<br>"+'<span class="msg_time">' + str_time + '</span>';
 
     // Append the image container and message container to the main container
     newDiv.appendChild(imgContDiv);
@@ -195,5 +211,13 @@ socket.on('message', function(data) {
 });
 
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var logoutButton = document.querySelector('.logout-button');
+        logoutButton.addEventListener('click', function() {
+            window.location.href = '/login/logout';
+        });
+    });
+    </script>
 </body>
 </html>

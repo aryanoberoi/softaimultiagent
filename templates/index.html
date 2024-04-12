@@ -1,30 +1,880 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Login Form</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-    </head>
-    <body>
-        <div class="login">
-            <h1>LOGIN</h1>
-            <div class="links">
-                <a href="{{ url_for('login') }}" class="active">LOGIN</a>
-                <a href="{{ url_for('register') }}">REGISTER</a>
-            </div>
-            <form action="" method="post">
-                <label for="username">
-                    <i class="fa fa-user"></i>
-                </label>
-                <input type="text" name="username" placeholder="Username" id="username" required>
-                <label for="password">
-                    <i class="fa fa-lock"></i>
-                </label>
-                <input type="password" name="password" placeholder="Password" id="password" required>
-                <div class="msg">{{ msg }}</div>
-                <input type="submit" value="Login">
-            </form>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoftAi - Virtual Software Development Company</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <img src="Images/logo 1.jpeg" alt="SoftAi Logo">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li id="login-link"><a href="http://127.0.0.1:8080/register">Register</a></li>
+
+                <li id="logout-link" class="hidden"><a href="#logout">Logout</a></li>
+              </ul>
+         </nav>
+    
+        <div  id="home">
+            <h1>Welcome to SoftAi</h1>
+            <p>Your virtual software development partner</p>
+            <a href="#contact" id="contact-btn" class="cta-button">Get in Touch</a>
         </div>
-    </body>
+    </header>
+    
+    <div id="services" class="container">
+        <h2>Our Services</h2>
+        <div class="service">
+            <img src="images/image1.jpeg" alt="Service 1 Image">
+            <h3>Custom Software Development</h3>
+            <p>We offer tailored solutions to meet your specific business needs.</p>
+        </div>
+        <div class="service">
+            <img src="images/image2.jpeg" alt="Service 2 Image">
+            <h3>Mobile App Development</h3>
+            <p>Create engaging mobile experiences with our expert app development team.</p>
+        </div>
+        <div class="service">
+            <img src="Images/image3.jpeg" alt="Service 3 Image">
+            <h3>Web Development</h3>
+            <p>Build responsive and feature-rich websites with our skilled , advanced and innovative web development team.</p>
+        </div>
+       
+        <div id="bots" class="container bots-container">
+            <h2>Explore Our Bots</h2>
+            <div class="service">
+                <img src="Images/ceo.jpeg" alt="CEO Chatbot">
+                <h3>CEO Chatbot</h3>
+                <p>A chatbot designed to assist CEOs in managing tasks and making decisions.</p>
+            </div>
+            <div class="service">
+                <img src="Images/cto.jpeg" alt="CTO Chatbot">
+                <h3>CTO Chatbot</h3>
+                <p>A chatbot tailored for Chief Technology Officers to streamline technical processes.</p>
+            </div>
+            <div class="service">
+                <img src="Images/engineer.jpeg" alt="Engineer Chatbot">
+                <h3>Engineer Chatbot</h3>
+                <p>A chatbot designed to assist engineers in project management and problem-solving.</p>
+            </div>
+        </div>
+        
+        </div>
+    </div>
+    </div>
+
+    <div id="testimonials" class="container">
+        <h2>What Our Clients Say</h2>
+        <div class="testimonials-wrapper">
+            <div class="testimonial active">
+                <p>"SoftAi revolutionized our workflow with their custom solutions. Highly recommend their services!" - Tech Innovations Ltd.</p>
+            </div>
+            <div class="testimonial">
+                <p>"Their mobile app development team is outstanding, delivering on time and beyond expectations." - MyAppStart</p>
+            </div>
+            <div class="testimonial">
+                <p>"We've seen tremendous growth thanks to SoftAi's tailored web development services. A true partner in our success." - eRetail Corp</p>
+            </div>
+        </div>
+        <div class="testimonial-navigation">
+            <button id="prev">&#10094; Prev</button>
+            <button id="next">Next &#10095;</button>
+        </div>
+    </div>
+    </div>
+    
+    
+    
+    <div id="about" class="container">
+        <h2>About Us</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>At SoftAi, we are passionate about creating innovative software solutions that empower businesses to succeed. With our team of skilled developers and designers, we strive to deliver exceptional results and exceed our clients' expectations.</p>
+            </div>
+            <div class="video-container">
+                <video controls>
+                    <source src="images/video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+        </div>
+    </div>
+  
+    <div id="contact" class="container">
+        <h2>Contact Us</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <p><i class="fas fa-envelope"></i> Email: info@SoftAi.com</p>
+                <p><i class="fas fa-phone"></i> Phone: +1 123-456-7890</p>
+                <p><i class="fas fa-map-marker-alt"></i> Address: 123 Main Street, City, Country</p>
+            </div>
+            <div class="contact-form">
+                <form id="contact-form">
+                    <input type="text" placeholder="Name" required>
+                    <input type="email" placeholder="Email" required>
+                    <textarea placeholder="Message" required></textarea>
+                    <button type="submit">Send</button>
+    </form>
+</div>
+</div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const contactBtn = document.getElementById('contact-btn');
+    const modal = document.getElementById('contact-modal');
+    const closeBtn = document.querySelector('.close');
+
+    // Open the modal
+    contactBtn.addEventListener('click', function () {
+        modal.style.display = 'block';
+    });
+
+    // Close the modal
+    closeBtn.addEventListener('click', function () {
+        modal.style.display = 'none';
+    });
+
+    // Close the modal when clicking outside of it
+    window.addEventListener('click', function (event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Form submission
+    const form = document.getElementById('contact-form');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        // Here you can handle form submission, e.g., send data to a server
+        alert('Thank you for contacting us!');
+        modal.style.display = 'none';
+        form.reset();
+    });
+});
+// Smooth scrolling
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const target = document.querySelector(this.getAttribute('href'));
+
+        window.scrollTo({
+            top: target.offsetTop,
+            behavior: 'smooth'
+        });
+    });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    // Existing script content
+    // Slider for testimonials
+    document.getElementById('next').addEventListener('click', function() {
+      const current = document.querySelector('.testimonial.active');
+      let next = current.nextElementSibling;
+      if (!next) {
+        next = document.querySelector('.testimonial:first-child');
+      }
+      current.classList.remove('active');
+      next.classList.add('active');
+    });
+
+    // Real-time email validation
+    document.getElementById('email').addEventListener('input', function(e) {
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (e.target.value.match(emailPattern)) {
+        e.target.classList.add('valid');
+        e.target.classList.remove('invalid');
+      } else {
+        e.target.classList.add('invalid');
+        e.target.classList.remove('valid');
+      }
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    const loginLink = document.getElementById('login-link');
+    const signupLink = document.getElementById('signup-link');
+    const logoutLink = document.getElementById('logout-link');
+
+    if (isLoggedIn) {
+        // User is logged in
+        loginLink.classList.add('hidden');
+        signupLink.classList.add('hidden');
+        logoutLink.classList.remove('hidden');
+    } else {
+        // User is logged out
+        loginLink.classList.remove('hidden');
+        signupLink.classList.remove('hidden');
+        logoutLink.classList.add('hidden');
+    }
+
+    logoutLink.addEventListener('click', function() {
+        // Handle logout
+        localStorage.setItem('isLoggedIn', 'false');
+        // Toggle visibility
+        loginLink.classList.remove('hidden');
+        signupLink.classList.remove('hidden');
+        logoutLink.classList.add('hidden');
+        // Reload or redirect as necessary
+        window.location.reload();
+    });
+});
+document.getElementById('logout-button').addEventListener('click', function(event) {
+    event.preventDefault(); // Stops the link from navigating
+    // Your logout logic here
+    console.log('Logging out...');
+    // Redirect after logout if necessary
+    window.location.href = 'index.html';
+});
+document.addEventListener('DOMContentLoaded', function() {
+    let currentIndex = 0;
+    const testimonials = document.querySelectorAll('.testimonial');
+    const totalTestimonials = testimonials.length;
+
+    function showTestimonial(index) {
+        testimonials.forEach((testimonial, i) => {
+            testimonial.classList.remove('active');
+            if (i === index) {
+                testimonial.classList.add('active');
+            }
+        });
+    }
+
+    document.getElementById('next').addEventListener('click', function() {
+        currentIndex = (currentIndex + 1) % totalTestimonials;
+        showTestimonial(currentIndex);
+    });
+
+    document.getElementById('prev').addEventListener('click', function() {
+        currentIndex = (currentIndex - 1 + totalTestimonials) % totalTestimonials;
+        showTestimonial(currentIndex);
+    });
+});
+
+document.getElementById('prev').addEventListener('click', function() {
+    console.log('Prev button clicked'); // Debugging line
+    currentIndex = (currentIndex - 1 + totalTestimonials) % totalTestimonials;
+    showTestimonial(currentIndex);
+});
+console.log('Current Index:', currentIndex, 'Total Testimonials:', totalTestimonials);
+function showTestimonial(index) {
+    testimonials.forEach((testimonial, i) => {
+        testimonial.classList.remove('active');
+        if (i === index) {
+            testimonial.classList.add('active');
+        }
+    });
+}
+
+
+    </script>
+    <footer>
+        <p>&copy; 2024 SoftAi. All rights reserved.</p>
+    </footer>
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box ;}
+body {
+    font-family: 'poppins', sans-serif;
+    overflow-x: hidden; 
+}
+
+html{
+    scroll-behavior: smooth;
+}
+nav {
+    background-color: transparent; 
+    color: #fff;
+    padding: 10px 20px;
+    position: absolute;
+    top: 20px;
+    left: 0; 
+    width: 100%; 
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+nav img {
+    
+    width: 70px; 
+    height: 70PX; 
+    margin-top: 10px; 
+    border-radius: 50%; 
+    overflow: hidden; 
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 20px;
+    right: 50px; 
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: rgba(255, 215, 0, 0.7); 
+}
+
+.container {
+    max-width: 800px;
+    margin: 100px auto;
+    padding: 20px;
+    text-align: center;
+}
+header {
+    background-image: url('images/3607424.jpg'); 
+    background-position: center;
+    background-size: cover;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+
+
+}
+header h1 {
+    color: #f0eaea;
+    font-size: 85px;
+    margin-top: 180px;
+    font-weight: 500;
+}
+
+header P {
+    font-size: 20px;
+    margin: 0.5rem 0;
+    color: #ece2e2b6;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: 60px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+form input,
+form textarea,
+form button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 60px;
+    box-sizing: border-box;
+}
+
+form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+#services {
+    padding: 1rem 0;
+    text-align: center;
+
+}
+#services h2{
+    margin-bottom: 5rem;
+
+}
+
+
+.service {
+    
+    text-align: center;
+    width: 30%;
+    display: inline-block;
+    padding: 0 1rem;
+    margin-bottom: 20px; 
+    text-align: center;
+    width: 30%; 
+    
+    
+    margin-right: 20px; 
+   
+    vertical-align: top; 
+    
+    
+}
+
+.service img {
+    width: 250px;;
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 50% ;
+}
+
+.service h3 {
+    margin-bottom: 1rem;
+}
+
+.service p {
+    margin-bottom: 0;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .service {
+        width: 100%; 
+        margin: 2rem 0;
+    }
+}
+
+.about-content {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+
+.about-text {
+    text-align: center; 
+    margin-bottom: 20px; 
+}
+
+.about-image img {
+    max-width: 100%; 
+    height: auto;
+    display: block; 
+}
+#about {
+    padding: 50px 8%;
+    line-height: 30px;
+}
+#about img{
+    margin-top: 0px;
+}
+
+.contact-info {
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start;
+}
+
+.contact-info p {
+    margin: 5px 0; 
+}
+
+.contact-info i {
+    margin-right: 10px; 
+}
+#contact{
+    padding: 50px 7%;
+    line-height: 30px;
+}
+#contact h2{
+    margin-bottom: 2rem;
+
+}
+.contact-form {
+    width: 600px; 
+    margin-left: auto; /* Align form to the right */
+    margin-right: auto;
+    margin-top: 4rem;
+}
+
+.contact-form input,
+.contact-form textarea{
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    background-color: #f2f2f2;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    
+}
+.contact-form button[type="submit"]{
+    width: 100%; /* Set width to 100% */
+    margin-bottom: 10px; /* Add spacing between form elements */
+    background-color: #00137e;
+    color: #fff;
+    padding:  1rem;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%; 
+}
+footer {
+    background-color: #00137e; 
+    color: #a7a3a3; 
+    padding: 1rem 0; /* Padding inside the footer */
+    display: flex;
+    justify-content: center;
+    
+    text-align: center; /* Center align text */
+}
+
+footer p {
+    font-size: 1.5rem;
+    margin: 0; /* Remove default margin */
+}
+/* Explore text styles */
+.explore-text {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+/* Chatbot Roles Section styles */
+.chatbot-roles {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.chatbot-role {
+    width: 250px; /* Increase width of the box */
+    height: 250px; /* Increase height of the box */
+    background-color: #f9f9f9;
+    padding: 20px; /* Adjust padding for content */
+    border-radius: 20px; /* Add rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.chatbot-role img {
+    width: 80%; /* Adjust size of the image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px;
+    margin-bottom: 10px; /* Adjust spacing */
+}
+
+.chatbot-description {
+    text-align: center; /* Center align text */
+}
+
+.chatbot-description h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.chatbot-description p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Hover effect */
+.chatbot-role:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Increased box shadow on hover */
+}
+#contact {
+    background-image: url('Images/3235319.jpg'); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    padding: 50px; /* Adjust padding as needed */
+    color: #f3eaeaf6; /* Adjust text color for better readability */
+}
+/* Existing Styles */
+/* Add the following new styles */
+
+.service, .chatbot-role-link, .testimonial, .about-video video {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.service:hover, .chatbot-role-link:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.testimonial {
+    display: none;
+    /* Additional styling for testimonials */
+}
+
+.testimonial.active {
+    display: block;
+}
+
+input.valid, input.invalid {
+    border-width: 2px;
+}
+
+input.valid {
+    border-color: green;
+}
+
+input.invalid {
+    border-color: red;
+}
+/* Dark Theme Global Styles */
+body, html {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Navigation and Links */
+nav, a {
+    color: #bb86fc;
+}
+
+nav a:hover {
+    color: #03dac6;
+}
+
+/* Containers */
+.container {
+    background-color: #333;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Service Cards and Chatbot Links */
+.service, .chatbot-role-link, .testimonial, .about-video video, .contact-form button {
+    background-color: #222;
+    color: #ddd;
+}
+
+/* Hover Effects for Service Cards and Chatbot Links */
+.service:hover, .chatbot-role-link:hover {
+    background-color: #444;
+}
+
+/* Form Elements */
+input[type="text"], input[type="email"], textarea {
+    background-color: #333;
+    color: #ddd;
+    border: 1px solid #555;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+    border: 1px solid #bb86fc;
+}
+
+/* Buttons */
+button, .cta-button {
+    background-color: #6200ee;
+    color: #fff;
+}
+
+button:hover, .cta-button:hover {
+    background-color: #3700b3;
+}
+
+/* Testimonials Slider */
+#next {
+    background-color: #03dac5;
+    color: #000;
+}
+
+#next:hover {
+    background-color: #018786;
+}
+
+/* Footer */
+footer {
+    background-color: #222;
+    color: #aaa;
+}
+
+/* Validation Feedback */
+input.valid, input.invalid {
+    border-width: 2px;
+}
+
+input.valid {
+    border-color: #03dac6;
+}
+
+input.invalid {
+    border-color: #cf6679;
+}
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    overflow: hidden;
+}
+
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width: 600px) {
+    .video-container {
+        padding-top: 75%; /* Adjusts aspect ratio for smaller devices */
+    }
+}
+.hidden {
+    display: none !important;
+}
+#home .container {
+    background: none; /* Remove any background */
+    box-shadow: none; /* Remove shadow */
+}
+
+.service img {
+    width: 100%; /* Ensure images don't overflow */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove any unwanted space below images */
+}
+#testimonials .container {
+    position: relative;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(83, 81, 81, 0.2);
+    background: url('images/abstract-digital-grid-black-background.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+.testimonial-navigation {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#prev, #next {
+    background-color: #020108; /* Primary button color */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 5px;
+}
+
+#prev:hover, #next:hover {
+    background-color: #031323;
+}
+#home {
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    /* Any other adjustments to align with your desired design */
+}
+
+button {
+    background-color: #007bff; /* Primary button color */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#prev, #next {
+    margin: 5px;
+}
+.contact-form textarea {
+    background-color: #333; /* Dark theme background */
+    color: #fff; /* Light text */
+    border: 1px solid #555; /* Slight border */
+}
+
+/* Style for the services/bots container */
+
+/* Style for each service/bot */
+.service {
+    background-color: #ffffff36; /* Initial background color */
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease;
+    margin-bottom: 20px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* Hover effect */
+.service:hover {
+    background-color: #e7e7e737; /* Background color on hover */
+    transform: translateY(-5px); /* Slight lift effect */
+    cursor: pointer;
+}
+
+
+    </style>
+</body>
 </html>
