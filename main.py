@@ -9,7 +9,7 @@ import os
 import ast
 from autogen.agentchat.contrib.gpt_assistant_agent import GPTAssistantAgent
 from flask_socketio import SocketIO
-from autogen import UserProxyAgent, GroupChat, GroupChatManager, config_list_from_json
+from autogen import UserProxyAgent, GroupChat, GroupChatManager, config_list_from_json, autogen
 app = Flask(__name__)
 
 
@@ -35,6 +35,7 @@ less_costly_config_list = config_list_from_json(
 less_costly_llm_config = {
     "config_list": less_costly_config_list,
     "timeout": 60,
+    "use_docker": False,
 }
 from autogen import ConversableAgent
 from autogen.coding import LocalCommandLineCodeExecutor
@@ -49,49 +50,43 @@ executor = LocalCommandLineCodeExecutor(
 )
 
 # Create an agent with code executor configuration.
-code_executor_agent = ConversableAgent(
-    "frontend engineer",
-    llm_config=False,  # Turn off LLM for this agent.
-    code_execution_config={"executor": executor},  # Use the local command line code executor.
-    human_input_mode="ALWAYS",  # Always take human input for this agent for safety.
+
+
+user_proxy = UserProxyAgent(
+    name="user_proxy",
+    human_input_mode="TERMINATE",
+    max_consecutive_auto_reply=10,
+    is_termination_msg=lambda x: x.get("content", "").rstrip().endswith("TERMINATE"),
 )
-
-
 code_writer_agent = GPTAssistantAgent(
-    name="code_writer_agent",
+    name="engineer",
     instructions=""""You are a helpful AI assistant.
 Solve tasks using your frontend coding and language skills.
 You collaberate with the designer to write and give the code in a single html file where js and css is all in the same one file.
-In the following cases, suggest html code for the user to execute. When you need to perform some task with code, use the code to perform the task and output the result. Finish the task smartly.
-If you want the user to save the code in a file before executing it, put # filename: <filename> inside the code block as the first line. 
+In the following cases, suggest html code for the user to execute. 
 Reply 'TERMINATE' in the end when everything is done.
 """,
     llm_config=less_costly_llm_config,
-    code_execution_config=False,  # Turn off code execution for this agent.
+    code_execution_config=False, 
 )
-user_proxy = UserProxyAgent(
+
+ceo = GPTAssistantAgent(
    name="CEO",
    llm_config=less_costly_llm_config,
-   system_message="""You are the CEO of a company that specializes in making landing pages with html, css and javascript with good design for specific use cases. Discuss wih the CTO on how you would design the website """,
-   human_input_mode="TERMINATE",
+   instructions="""You are the CEO of a company that specializes in making landing pages with html, css and javascript with good design for specific use cases. Discuss wih the CTO on how you would design the website based on the input by user_proxy """,
    max_consecutive_auto_reply=5
 )
 
 sam = GPTAssistantAgent(
     name="CTO",
     llm_config=less_costly_llm_config,
-    instructions="""You are the CTO of a software company. Engage in a aconversation with the ceo and gather requirements, discuss the features and requirements of making the landing page with html,  css and javascript."""
+    instructions="""You are the CTO of a software company. Engage in a aconversation with the ceo and gather requirements, discuss the features and requirements of making the landing page with html,  css and javascript. Then direct the conversation to the designer and the engineer"""
 )
 
 bob = GPTAssistantAgent(
     name="Designer",
     llm_config=less_costly_llm_config,
-    instructions="""You are a UI/UX designer for website landing pages. You will understand the requirements by talking to the CEO and the conversation between CEO and CTO and based on the takeaway you will create a proper and beautiful design for the anding page and pass it on the engineer.""",
-)
-summ = GPTAssistantAgent(
-    name="summ",
-    llm_config=less_costly_llm_config,
-    instructions="""You are a summarizer bot. At the end of the entire discussion, you summarize the requirements of the landing page and all the information in about 50 words to pass to the designer and the frontend engineer. You summarize all the requirements technically and include all the feature of the landing page discussed between ceo and cto. You will only send a single message when all the requirements have been discussed""",
+    instructions="""You are a UI/UX designer for website landing pages. You will understand the requirements by talking to the CEO and the conversation between CEO and CTO and based on the takeaway you will create a proper and beautiful design for the landing page and pass it to the engineer to execute.""",
 )
 
 costly_config_list = config_list_from_json(
@@ -107,9 +102,8 @@ costly_llm_config = {
     "config_list": costly_config_list,
     "timeout": 60,
 }
-
 # define group chat
-groupchat = GroupChat(agents=[user_proxy, sam, summ, code_writer_agent, bob], messages=[], max_round=1000)
+groupchat = GroupChat(agents=[user_proxy, sam, code_writer_agent, bob,ceo], messages=[], max_round=1000)
 manager = GroupChatManager(groupchat=groupchat, llm_config=costly_llm_config)
 
 
@@ -152,6 +146,10 @@ def login():
             msg = 'Incorrect username/password!'
     return render_template('login.html', msg='')
 
+@app.route('/file')
+def fil():
+    import os
+    print(os.listdir(temp_dir.name))
 
 @app.route('/login/logout')
 def logout():
@@ -160,7 +158,7 @@ def logout():
     session.pop('id', None)
     session.pop('username', None)
     # Redirect to login page
-    return redirect(url_for('login'))
+    return render_template('index.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -211,12 +209,16 @@ def home():
 def chat():
     msg = request.form["msg"]
     input = str(msg)
+    import os
+
+    print(os.listdir(temp_dir.name))
     return get_Chat_response(input)
 
 
 def get_Chat_response(text):
    user_proxy.initiate_chat(manager, message=text, summary_method="reflection_with_llm")
    messages = user_proxy.chat_messages[manager] 
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)

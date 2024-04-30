@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chatbot</title>
+    <title>SoftAI Chat</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -12,6 +12,7 @@
             height: 100%;
             margin: 0;
             font-family: Arial, sans-serif;
+            background-color: #343a40;
         }
         .container-fluid {
             height: 100%;
@@ -84,29 +85,56 @@
             width: 50px;
             height: 50px;
         }
+        .msg_head {
+    background-color: #343a40; /* Dark background color */
+    color: #fff; /* White text color */
+    padding: 10px; /* Add padding for better spacing */
+    border-top-left-radius: 15px; /* Round corners */
+    border-top-right-radius: 15px;
+}
+.header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .navigation {
+            margin-top: 20px;
+        }
+        .navigation a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-
-<div class="container-fluid h-100">
-    <div class="sidebar">
-        <button class="bot-button" style="background-image: url('your-image-url-for-bot1.jpg');"><span>Bot 1</span></button>
-        <button class="bot-button" style="background-image: url('your-image-url-for-bot2.jpg');"><span>Bot 2</span></button>
-        <button class="bot-button" style="background-image: url('your-image-url-for-bot3.jpg');"><span>Bot 3</span></button>
-        <button class="bot-button" style="background-image: url('your-image-url-for-bot4.jpg');"><span>Bot 4</span></button>
-        <button class="bot-button" style="background-image: url('your-image-url-for-bot5.jpg');"><span>Bot 5</span></button>
-        <button class="bot-button" style="background-image: url('your-image-url-for-bot6.jpg');"><span>Bot 6</span></button>
-        <button class="logout-button"><span>Logout</span></button>
-    </div>
+    <header class="header">
+        <nav class="navigation">
+            <a href="http://127.0.0.1:8080/file">Download Code File</a>
+            <a href="http://127.0.0.1:8080/login/logout">Logout</a>
+        </nav>
+    </header>
+    <div class="container-fluid h-100">
     <div class="chat">
         <div class="card">
             <div class="card-header msg_head">
                 <div class="d-flex bd-highlight">
                     <div class="img_cont">
-                        <img src="https://images.unsplash.com/photo-1567515004624-219c11d31f2e?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="rounded-circle user_img">
+                        <img src="/static/images/logo 1.jpeg" class="rounded-circle user_img">
                     </div>
                     <div class="user_info">
-                        <span>Chat with our Bot</span>
+                        <span><br> Send "TERMINATE" to terminate the chat</span>
                     </div>
                 </div>
             </div>
@@ -162,7 +190,6 @@
         const socket = io()
 socket.on('message', function(data) {
     // Create the main container div with d-flex class
-    
     const newDiv = document.createElement('div');
     newDiv.className = "d-flex justify-content-start mb-4";
 
@@ -172,21 +199,19 @@ socket.on('message', function(data) {
 
     // Create the image tag
     const img = document.createElement('img');
+    
     switch(data.sender) {
         case "CEO":
-            img.src = "https://cdn.pixabay.com/photo/2023/06/24/01/56/portrait-8084362_1280.jpg";
+            img.src = "/static/images/ceo.png";
             break;
         case "CTO":
-            img.src = "https://cdn.pixabay.com/photo/2023/10/20/14/25/ai-generated-8329596_1280.jpg";
+            img.src = "/static/images/cto.png";
             break;
-        case "Engineer":
-            img.src = "https://cdn.pixabay.com/photo/2023/10/20/14/25/ai-generated-8329596_1280.jpg";
+        case "engineer":
+            img.src = "/static/images/engineer.png";
             break;
         case "Designer":
-            img.src = "https://cdn.pixabay.com/photo/2023/10/20/14/25/ai-generated-8329596_1280.jpg";
-            break;
-        case "CodeReviewer":
-            img.src = "https://cdn.pixabay.com/photo/2024/01/05/18/47/technology-8490011_1280.png";
+            img.src = "/static/images/designer.png";
             break;
     }
     img.className = "rounded-circle user_img_msg";
@@ -208,8 +233,8 @@ socket.on('message', function(data) {
 
     // Append the main container to the "messageFormeight" element
     document.getElementById('messageFormeight').appendChild(newDiv);
-});
 
+});
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -218,6 +243,6 @@ socket.on('message', function(data) {
             window.location.href = '/login/logout';
         });
     });
-    </script>
+</script>
 </body>
 </html>
