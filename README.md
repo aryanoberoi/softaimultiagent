@@ -5,7 +5,7 @@
 
 **Client:** HTML, CSS, TailwindCSS, Javascript
 
-**Server:** Flask,MySQL, SocketIO
+**Server:** Flask,SocketIO
 
 **GenAI:** Open AI API, AutoGEN framework
 
@@ -21,8 +21,7 @@ Run the application by running python main.py
 ## Documentation
 
 Soft AI, virtual chat-powered company for software
- development, brings together agents including chief officers, professional programmers, test
- engineers, and UI/UX designers. When presented with a preliminary
+ development, brings together agents including chief officers, professional programmers and UI/UX designers. When presented with a preliminary
  task by a human “client, the agents at SoftAI engage in
  effective communication and mutual verification
  through collaborative chatting. This process enables them to
@@ -53,7 +52,7 @@ Soft AI, virtual chat-powered company for software
 
 - Custom Message Handling: Overrides default message handling to extract and broadcast chat content dynamically, enhancing the chat experience.
 
-#### AI Agents and Group Chats
+#### AI Agents and Group Chats (Autogen)
 
 - GroupChat and GroupChatManager: Orchestrates conversations among multiple participants, including real users and AI agents, enforcing turn-based messaging and chat progression.
 
@@ -70,24 +69,9 @@ Soft AI, virtual chat-powered company for software
 
 
 
-#### Overview of AutoGen LLM
-
-##### Introduction to AutoGen:
-
-AutoGen is a cutting-edge framework designed for developing LLM (Large Language Models) applications. It enables seamless integration of multiple conversational agents that can autonomously or collaboratively perform complex tasks.
 
 
 
 
-
-
-## Demo
-
-Insert gif or link to demo
-
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
 
 
