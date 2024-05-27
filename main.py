@@ -16,12 +16,23 @@ app = Flask(__name__)
 app.secret_key = ' key'
 socket_io = SocketIO(app)
 def new_print_received_message(self, message, sender):
-    message = self._message_to_dict(message)
-    print(f"{sender.name}: {message.get('content')}")
-    socket_io.emit('message', {"sender": sender.name, "content": message.get('content')})
+    # Convert the message to a dictionary
+    message_dict = self._message_to_dict(message)
+    
+    # Extract the content from the message dictionary
+    content = message_dict.get('content')
+    
+    # Check if the content is a list (multiple messages) or a single message
+    if isinstance(content, str):
+        content = [content]
 
+    # Emit each message separately
+    for msg in content:
+        print(f"{sender.name}: {msg}")
+        socket_io.emit('message', {"sender": sender.name, "content": msg})
 
 GroupChatManager._print_received_message = new_print_received_message
+
 
 less_costly_config_list = config_list_from_json(
     env_or_file="OAI_CONFIG_LIST.json", 
@@ -73,14 +84,14 @@ Reply 'TERMINATE' in the end when everything is done.
 ceo = GPTAssistantAgent(
    name="CEO",
    llm_config=less_costly_llm_config,
-   instructions="""You are the CEO of a company that specializes in making landing pages with html, css and javascript with good design for specific use cases. Discuss wih the CTO on how you would design the website based on the input by user_proxy """,
+   instructions="""You are the CEO of a company that specializes in making landing pages with html, css and javascript with good design for specific use cases.Discuss the requirements of the landing page and pass them to the CTO. Keep your message under 120 words.""",
    max_consecutive_auto_reply=5
 )
 
 sam = GPTAssistantAgent(
     name="CTO",
     llm_config=less_costly_llm_config,
-    instructions="""You are the CTO of a software company. Engage in a aconversation with the ceo and gather requirements, discuss the features and requirements of making the landing page with html,  css and javascript. Then direct the conversation to the designer and the engineer"""
+    instructions="""You are the CTO of a software company. Engage in a aconversation with the ceo and gather requirements, discuss the features and requirements of making the landing page with html,  css and javascript. Then direct the conversation to the designer and the engineer to execute. Keep response under 100 words."""
 )
 
 bob = GPTAssistantAgent(
@@ -93,8 +104,9 @@ costly_config_list = config_list_from_json(
     env_or_file="OAI_CONFIG_LIST.json", 
     filter_dict={
         "model": [
-            "gpt-3.5-turbo-1106",
+            "gpt-4-turbo",
         ]
+    
     }
 )
 
@@ -157,7 +169,6 @@ def logout():
     session.pop('loggedin', None)
     session.pop('id', None)
     session.pop('username', None)
-    # Redirect to login page
     return render_template('index.html')
 
 @app.route('/register', methods=['GET', 'POST'])
