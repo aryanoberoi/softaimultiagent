@@ -5,9 +5,15 @@
 
 **Client:** HTML, CSS, TailwindCSS, Javascript
 
+<<<<<<< HEAD
 **Server:** Flask,MySQL, SocketIO
 
 **GPT:** Open AI API, AutoGEN framework
+=======
+**Server:** Flask,SocketIO
+
+**GenAI:** Open AI API, AutoGEN framework
+>>>>>>> 9e79067fe5f7a8c8d0ad1efd19856035b1672f71
 
 ## Installation
 
@@ -21,15 +27,23 @@ Run the application by running python main.py
 ## Documentation
 
 Soft AI, virtual chat-powered company for software
+<<<<<<< HEAD
  development, brings together agents including chief officers, professional programmers, test
  engineers, and UI/UX designers. When presented with a preliminary
+=======
+ development, brings together agents including chief officers, professional programmers and UI/UX designers. When presented with a preliminary
+>>>>>>> 9e79067fe5f7a8c8d0ad1efd19856035b1672f71
  task by a human “client, the agents at SoftAI engage in
  effective communication and mutual verification
  through collaborative chatting. This process enables them to
  automatically craft comprehensive
+<<<<<<< HEAD
  software solutions that encompass source codes, environment
  dependencies, and user manuals.
 
+=======
+ landing pages that are well designed, tested and satisfy user requirement.
+>>>>>>> 9e79067fe5f7a8c8d0ad1efd19856035b1672f71
 #### Setup
 
 - Flask Setup: The application is built on Flask, a lightweight WSGI web application framework in Python, providing tools and features to build web apps quickly.
@@ -55,7 +69,11 @@ Soft AI, virtual chat-powered company for software
 
 - Custom Message Handling: Overrides default message handling to extract and broadcast chat content dynamically, enhancing the chat experience.
 
+<<<<<<< HEAD
 #### AI Agents and Group Chats
+=======
+#### AI Agents and Group Chats (Autogen)
+>>>>>>> 9e79067fe5f7a8c8d0ad1efd19856035b1672f71
 
 - GroupChat and GroupChatManager: Orchestrates conversations among multiple participants, including real users and AI agents, enforcing turn-based messaging and chat progression.
 
@@ -72,17 +90,21 @@ Soft AI, virtual chat-powered company for software
 
 
 
+<<<<<<< HEAD
 #### Overview of AutoGen LLM
 
 ##### Introduction to AutoGen:
 
 AutoGen is a cutting-edge framework designed for developing LLM (Large Language Models) applications. It enables seamless integration of multiple conversational agents that can autonomously or collaboratively perform complex tasks.
+=======
+>>>>>>> 9e79067fe5f7a8c8d0ad1efd19856035b1672f71
 
 
 
 
 
 
+<<<<<<< HEAD
 ## Demo
 
 Insert gif or link to demo
@@ -93,3 +115,5 @@ Insert gif or link to demo
 [MIT](https://choosealicense.com/licenses/mit/)
 
 
+=======
+>>>>>>> 9e79067fe5f7a8c8d0ad1efd19856035b1672f71
